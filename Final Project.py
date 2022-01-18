@@ -15,23 +15,12 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 TEAL = (0, 128, 128)
 GRASS_GREEN = (126, 200, 80)
-# Mechanics
-SIZE = 50
-x_vel = 0
-y_vel = 0
-x = 240
-y = 240
-speed = 10
-s_width = 750
-s_height = 750
-rand_x = round(random.randrange(0, s_width - SIZE) / 10) * 10
-rand_y = round(random.randrange(0, s_height - SIZE) / 10) * 10
-score = 0
-print(rand_x)
-print(rand_y)
+
 
 
 # Initialization
+s_width = 750
+s_height = 750
 pygame.init()
 screen = pygame.display.set_mode((s_width, s_height))
 pygame.display.set_caption('Snake')
@@ -51,56 +40,95 @@ def food():
     pygame.draw.rect(screen, (RED), (rand_x, rand_y, SIZE, SIZE))
     
 
-# Loop
-run = True
 
-while run == True:
-    
-    
-    pygame.time.delay(10)
-    
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                x_vel = -speed
-                y_vel = 0
-            elif event.key == pygame.K_RIGHT:
-                x_vel = speed
-                y_vel = 0
-            elif event.key == pygame.K_UP:
-                y_vel = -speed
-                x_vel = 0
-            elif event.key == pygame.K_DOWN:
-                y_vel = speed
-                x_vel = 0
+#def snake():
 
 
-    if x <= 0 or x >= s_width or y <= 0 or y >= s_height:
-        run = False
-    
-    if x == rand_x and y == rand_y:
-        print("Yummy")
-        score = int(score)
-        score += 1
-        print(score)
-        rand_x = round(random.randrange(0, s_width - SIZE) / 10) * 10
-        rand_y = round(random.randrange(0, s_height - SIZE) / 10) * 10
- 
-    x += x_vel
-    y += y_vel
-    screen.fill((GRASS_GREEN))
-    
-    pygame.draw.rect(screen, (RED), (rand_x, rand_y, SIZE, SIZE))
 
-    message('Score: ' + str(score), WHITE, 5, 0)
-    pygame.draw.rect(screen, (TEAL), (x, y, SIZE, SIZE))
-    pygame.display.update() 
-    
-    clock.tick(speed * 2)
+def main():
 
-message('You Lost', RED, 500, 250)
-pygame.display.update()
-time.sleep(1)
-pygame.quit()
+    SIZE = 50
+    x_vel = 0
+    y_vel = 0
+    x = 240
+    y = 240
+    speed = 10
+    rand_x = round(random.randrange(0, s_width - SIZE) / 10) * 10
+    rand_y = round(random.randrange(0, s_height - SIZE) / 10) * 10
+    score = 0
+
+    
+    
+    
+    
+    
+    run = True
+    go_again = False
+    while run == True:
+        while go_again == True:
+            screen.fill(GRASS_GREEN)
+            message("You Lost! Press 1-Play Again or 2-Quit", RED, 0, 300)
+     
+            pygame.display.update()
+     
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                     if event.key == pygame.K_2:
+                        run = False
+                        go_again = False
+                     if event.key == pygame.K_1:
+                        main()
+            
+
+
+
+        
+        pygame.time.delay(10)
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    x_vel = -speed
+                    y_vel = 0
+                elif event.key == pygame.K_RIGHT:
+                    x_vel = speed
+                    y_vel = 0
+                elif event.key == pygame.K_UP:
+                    y_vel = -speed
+                    x_vel = 0
+                elif event.key == pygame.K_DOWN:
+                    y_vel = speed
+                    x_vel = 0
+
+
+        if x <= 0 or x >= s_width or y <= 0 or y >= s_height:
+            go_again = True
+        
+        if x == rand_x and y == rand_y:
+            print("Yummy")
+            score = int(score)
+            score += 1
+            print(score)
+            rand_x = round(random.randrange(0, s_width - SIZE) / 10) * 10
+            rand_y = round(random.randrange(0, s_height - SIZE) / 10) * 10
+     
+        x += x_vel
+        y += y_vel
+        screen.fill((GRASS_GREEN))
+        
+        pygame.draw.rect(screen, (RED), (rand_x, rand_y, SIZE, SIZE))
+
+        message('Score: ' + str(score), WHITE, 5, 0)
+        pygame.draw.rect(screen, (TEAL), (x, y, SIZE, SIZE))
+        pygame.display.update() 
+        
+        clock.tick(speed * 2)
+
+
+
+    pygame.quit()
+
+#Main Code#
+main()
