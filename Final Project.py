@@ -41,13 +41,15 @@ def food():
     
 
 
-#def snake():
+def snake(SIZE, snake_tail):
+    for x in snake_tail:
+        pygame.draw.rect(screen, TEAL, [x[0], x[1], SIZE, SIZE])
 
 
 
 def main():
-
-    SIZE = 50
+    
+    SIZE = 10
     x_vel = 0
     y_vel = 0
     x = 240
@@ -56,8 +58,8 @@ def main():
     rand_x = round(random.randrange(0, s_width - SIZE) / 10) * 10
     rand_y = round(random.randrange(0, s_height - SIZE) / 10) * 10
     score = 0
-
-    
+    snake_tail = []
+    snake_len = 1
     
     
     
@@ -67,8 +69,8 @@ def main():
     while run == True:
         while go_again == True:
             screen.fill(GRASS_GREEN)
-            message("You Lost! Press 1-Play Again or 2-Quit", RED, 0, 300)
-     
+            message("You Lost! Press 1-Play Again or 2-Quit", RED, 50, s_height/2)
+            message("Score: " + str(score), WHITE, 0, 0)
             pygame.display.update()
      
             for event in pygame.event.get():
@@ -106,6 +108,31 @@ def main():
         if x <= 0 or x >= s_width or y <= 0 or y >= s_height:
             go_again = True
         
+
+             
+             
+        x += x_vel
+        y += y_vel
+        screen.fill((GRASS_GREEN))
+        pygame.draw.rect(screen, (RED), (rand_x, rand_y, SIZE, SIZE))
+        message('Score: ' + str(score), WHITE, 5, 0)
+        pygame.draw.rect(screen, (TEAL), (x, y, SIZE, SIZE))
+       
+        snake_Head = []
+        snake_Head.append(x)
+        snake_Head.append(y)
+        snake_tail.append(snake_Head)
+        if len(snake_tail) > snake_len:
+            del snake_tail[0]
+        for x1 in snake_tail[:-1]:
+            if x1 == snake_Head:
+                go_again = True
+ 
+        snake(SIZE, snake_tail)
+        
+        
+        pygame.display.update() 
+        
         if x == rand_x and y == rand_y:
             print("Yummy")
             score = int(score)
@@ -113,16 +140,9 @@ def main():
             print(score)
             rand_x = round(random.randrange(0, s_width - SIZE) / 10) * 10
             rand_y = round(random.randrange(0, s_height - SIZE) / 10) * 10
-     
-        x += x_vel
-        y += y_vel
-        screen.fill((GRASS_GREEN))
+            snake_len += 1
         
-        pygame.draw.rect(screen, (RED), (rand_x, rand_y, SIZE, SIZE))
-
-        message('Score: ' + str(score), WHITE, 5, 0)
-        pygame.draw.rect(screen, (TEAL), (x, y, SIZE, SIZE))
-        pygame.display.update() 
+        
         
         clock.tick(speed * 2)
 
